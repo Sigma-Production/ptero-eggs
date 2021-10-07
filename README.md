@@ -1,6 +1,5 @@
 # pterodactyl-nginx
 
-self explanatory
 
 ```
 ghcr.io/finnie2006/nginx-ptero:latest
