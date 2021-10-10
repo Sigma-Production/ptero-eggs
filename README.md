@@ -1,5 +1,4 @@
-# pterodactyl-Nextcloud
-
+# pterodactyl-nextcloud
 
 
 ```
@@ -13,4 +12,4 @@ How to use:
 4. Navigate to the given port and ip and u are good to go just add ur files to the webroot folder
 Note: if u want it using a domain then create a reverse proxy on the host (an example will be added later)
 
-forked and edited from https://gitlab.com/tenten8401/pterodactyl-nginx
+Original egg forked and edited from https://gitlab.com/tenten8401/pterodactyl-nginx
