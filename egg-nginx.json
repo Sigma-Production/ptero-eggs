@@ -5,12 +5,12 @@
         "update_url": null
     },
     "exported_at": "2021-10-07T21:19:42+02:00",
-    "name": "Nginx",
+    "name": "Nextcloud",
     "author": "unknown@unknown.com",
-    "description": "An Nginx egg to host any Website",
+    "description": "A Nextcloud egg, a safe home for all your data",
     "features": null,
     "images": [
-        "ghcr.io\/finnie2006\/nginx-ptero"
+        "ghcr.io\/finnie2006\/nextcloud-ptero"
     ],
     "file_denylist": [],
     "startup": "{{STARTUP_CMD}}",
@@ -18,7 +18,7 @@
         "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
-        "stop": "^C"
+        "stop": "^^C"
     },
     "scripts": {
         "installation": {
