@@ -5,7 +5,7 @@ on:
 
 jobs:
   push:
-    name: "ptero-nextcloud:latest"
+    name: "nextcloud-ptero:latest"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -27,4 +27,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/finnie2006/ptero-nextcloud:latest
+            ghcr.io/finnie2006/nextcloud-ptero:latest
