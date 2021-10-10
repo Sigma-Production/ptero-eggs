@@ -1,9 +1,8 @@
-# pterodactyl-Nextcloud
-
+# pterodactyl-nginx
 
 
 ```
-ghcr.io/finnie2006/nextcloud-ptero:latest
+ghcr.io/finnie2006/nginx-ptero:latest
 ```
 
 How to use:
