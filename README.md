@@ -1,6 +1,6 @@
 # pterodactyl-Nextcloud
 
-
+# New: Updated Image and MultiArch
 
 ```
 ghcr.io/finnie2006/nextcloud-ptero:latest
