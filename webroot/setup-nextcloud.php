@@ -75,9 +75,9 @@ class Setup {
 		$error = '';
 		$missingDependencies = array();
 
-		// do we have PHP 7.2.0 or newer?
-		if(version_compare(PHP_VERSION, '7.2.0', '<')) {
-			$error.='PHP 7.2.0 is required. Please ask your server administrator to update PHP to version 7.2.0 or higher.<br/>';
+		// do we have PHP 7.3.0 or newer?
+		if(version_compare(PHP_VERSION, '7.3.0', '<')) {
+			$error.='PHP 7.3.0 is required. Please ask your server administrator to update PHP to version 7.3.0 or higher.<br/>';
 		}
 
 		// running oC on windows is unsupported since 8.1
