@@ -1,3 +1,3 @@
 <?php
-echo "Hello World!";
+echo "Go to /setup-nextcloud.php!";
 phpinfo();
