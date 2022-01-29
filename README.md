@@ -1,10 +1,6 @@
-# pterodactyl-Nextcloud
+# pterodactyl eggs
 
-# New: Updated Image and MultiArch
 
-```
-ghcr.io/finnie2006/nextcloud-ptero:latest
-```
 
 How to use:
 1. Go to releases and download the json file
