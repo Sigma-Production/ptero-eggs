@@ -11,6 +11,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
+      - uses: docker/setup-qemu-action@v1
       - uses: docker/setup-buildx-action@v1
         with:
           version: "v0.5.1"
@@ -24,7 +25,7 @@ jobs:
         with:
           context: ./
           file: ./Dockerfile
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ghcr.io/finnie2006/nginx-ptero:latest
