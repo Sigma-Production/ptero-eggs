@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2022-02-24T14:40:37+01:00",
+    "name": "Deemix",
+    "author": "info@finniedj.nl",
+    "description": "Deemix egg\r\n\r\nDeemix is software to download musing from Deezer\r\n\r\nNote: Deemix does not update automatically, you have to reinstall to update!\r\n\r\nhttps:\/\/deemix.app\/",
+    "features": null,
+    "images": [
+        "ghcr.io\/pterodactyl\/yolks:nodejs_16"
+    ],
+    "file_denylist": [],
+    "startup": ".\/start.sh {{SERVER_PORT}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"[deemix-server]: Listening on port\"\r\n}",
+        "logs": "{}",
+        "stop": "^^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "apt update\r\napt install unzip curl wget -y\r\ncd \/mnt\/server\r\ncurl -L -o deemix.zip http:\/\/gitlab.com\/Bockiii\/deemix-src\/-\/jobs\/artifacts\/master\/download?job=dl_src && \\\r\nunzip deemix\r\nmv \/mnt\/server\/deemix-gui\/* \/mnt\/server\r\nrm -r deemix-gui\r\nwget https:\/\/raw.githubusercontent.com\/finnie2006\/ptero-eggs\/Deemix\/start.sh\r\nchmod +x \/mnt\/server\/start.sh\r\nrm -r \/mnt\/server\/deemix.zip",
+            "container": "ubuntu:focal",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": []
+}
