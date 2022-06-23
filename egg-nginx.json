@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-06-23T22:19:00+02:00",
+    "exported_at": "2022-06-23T23:05:44+02:00",
     "name": "Nginx",
     "author": "info@finniedj.nl",
     "description": "An Nginx egg to host any Website",
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\n\r\napk --update add git\r\n\r\ngit clone https:\/\/github.com\/finnie2006\/ptero-nginx .\/temp\r\n\r\ncp -r .\/temp\/nginx \/mnt\/server\/\r\ncp -r .\/temp\/php-fpm \/mnt\/server\/\r\ncp -r .\/temp\/webroot \/mnt\/server\/\r\ncp .\/temp\/start.sh \/mnt\/server\/\r\nchmod +x \/mnt\/server\/start.sh\r\nrm -rf .\/temp\r\n\r\nif [ \"${WORDPRESS}\" == \"true\" ] || [ \"${WORDPRESS}\" == \"1\" ]; then\r\n    echo -e \"Installing wordpress\"\r\n    cd \/mnt\/server\/webroot\r\n    wget http:\/\/wordpress.org\/latest.tar.gz\r\n    tar xzf latest.tar.gz\r\n   mv wordpress\/* .\r\n   rm -rf wordpress latest.tar.gz\r\n   echo -e \"Install complete go to: \"\r\n   exit 0\r\nfi",
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\n\r\napk --update add git\r\n\r\ngit clone https:\/\/github.com\/finnie2006\/ptero-nginx .\/temp\r\n\r\ncp -r .\/temp\/nginx \/mnt\/server\/\r\ncp -r .\/temp\/php-fpm \/mnt\/server\/\r\ncp -r .\/temp\/webroot \/mnt\/server\/\r\ncp .\/temp\/start.sh \/mnt\/server\/\r\nchmod +x \/mnt\/server\/start.sh\r\nrm -rf .\/temp\r\n\r\nif [ \"${WORDPRESS}\" == \"true\" ] || [ \"${WORDPRESS}\" == \"1\" ]; then\r\n    echo -e \"Installing wordpress\"\r\n    cd \/mnt\/server\/webroot\r\n    wget http:\/\/wordpress.org\/latest.tar.gz\r\n    tar xzf latest.tar.gz\r\n   mv wordpress\/* .\r\n   rm -rf wordpress latest.tar.gz\r\n   echo -e \"Install complete go to http:\/\/ip:port\/wp-admin \"\r\n   exit 0\r\nfi",
             "container": "alpine:latest",
             "entrypoint": "ash"
         }
