@@ -14,4 +14,7 @@ ENV HOME /home/container
 WORKDIR /home/container
 COPY ./entrypoint.sh /entrypoint.sh
 
+RUN mkdir /home/container/logs
+COPY ./logs/* /home/container/logs/
+
 CMD ["/bin/ash", "/entrypoint.sh"]
