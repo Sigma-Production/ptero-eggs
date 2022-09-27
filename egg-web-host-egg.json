@@ -4,13 +4,14 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-08-14T19:35:51+02:00",
+    "exported_at": "2022-09-27T14:50:15+02:00",
     "name": "WebHost Egg",
     "author": "info@finniedj.nl",
     "description": "An egg to host any Website.\r\nit also has composer, just specify your packages in the packages box, and it will install the packages when you start the server, it also has wordpress, just turn on the slider when you make the server, and wordpress will get installed for you\r\n\r\nSigma Productions 2022",
     "features": null,
     "docker_images": {
-        "ghcr.io\/finnie2006\/nginx-ptero": "ghcr.io\/finnie2006\/nginx-ptero"
+        "PHP 8.0": " ghcr.io\/finnie2006\/nginx-ptero:8.0",
+        "PHP 8.1": " ghcr.io\/finnie2006\/nginx-ptero:8.1"
     },
     "file_denylist": [],
     "startup": "{{STARTUP_CMD}}; if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/containe\r\nr\/webroot; fi;",
