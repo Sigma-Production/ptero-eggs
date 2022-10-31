@@ -5,7 +5,7 @@ on:
 
 jobs:
   push:
-    name: "nginx-ptero:latest"
+    name: "nextcloud-by-shane:latest"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -28,4 +28,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/finnie2006/nginx-ptero:latest
+            ghcr.io/Dragon-Node/nextcloud-by-shane:latest
