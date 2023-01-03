@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-09-27T14:50:15+02:00",
+    "exported_at": "2023-01-03T20:47:17+01:00",
     "name": "WebHost Egg",
     "author": "info@finniedj.nl",
     "description": "An egg to host any Website.\r\nit also has composer, just specify your packages in the packages box, and it will install the packages when you start the server, it also has wordpress, just turn on the slider when you make the server, and wordpress will get installed for you\r\n\r\nSigma Productions 2022",
@@ -14,7 +14,7 @@
         "PHP 8.1": " ghcr.io\/finnie2006\/nginx-ptero:8.1"
     },
     "file_denylist": [],
-    "startup": "{{STARTUP_CMD}}; if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/containe\r\nr\/webroot; fi;",
+    "startup": "if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/container\/webroot; fi; {{STARTUP_CMD}};",
     "config": {
         "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"\",\r\n    \"userInteraction\": []\r\n}",
@@ -23,7 +23,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\ncd \/mnt\/server\r\napk --update add git\r\n\r\n# cloning repo with nginx and php files\r\ngit clone https:\/\/github.com\/finnie2006\/ptero-nginx .\/temp\r\n\r\ncp -r .\/temp\/nginx \/mnt\/server\/\r\ncp -r .\/temp\/php-fpm \/mnt\/server\/\r\ncp -r .\/temp\/webroot \/mnt\/server\/\r\ncp .\/temp\/start.sh \/mnt\/server\/\r\nchmod +x \/mnt\/server\/start.sh\r\nrm -rf .\/temp\r\nmkdir \/mnt\/server\/tmp\r\nmkdir \/mnt\/server\/logs\r\nif [ \"${WORDPRESS}\" == \"false\" ] || [ \"${WORDPRESS}\" == \"0\" ]; then\r\necho -e \"Install complete go to http:\/\/ip:port\/\"\r\nfi\r\n\r\n\r\n#wordpress\r\nif [ \"${WORDPRESS}\" == \"true\" ] || [ \"${WORDPRESS}\" == \"1\" ]; then\r\n    echo -e \"Installing wordpress\"\r\n    cd \/mnt\/server\/webroot\r\n    wget http:\/\/wordpress.org\/latest.tar.gz\r\n    tar xzf latest.tar.gz\r\n   mv wordpress\/* .\r\n   rm -rf wordpress latest.tar.gz\r\n   echo -e \"Install complete go to http:\/\/ip:port\/wp-admin \"\r\n   exit 0\r\n   \r\n   fi",
+            "script": "#!\/bin\/ash\r\ncd \/mnt\/server\r\napk --update add git\r\n\r\n# cloning repo with nginx and php files\r\ngit clone https:\/\/github.com\/Sigma-Production\/ptero-eggs .\/temp\r\n\r\ncp -r .\/temp\/nginx \/mnt\/server\/\r\ncp -r .\/temp\/php-fpm \/mnt\/server\/\r\ncp -r .\/temp\/webroot \/mnt\/server\/\r\ncp .\/temp\/start.sh \/mnt\/server\/\r\nchmod +x \/mnt\/server\/start.sh\r\nrm -rf .\/temp\r\nmkdir \/mnt\/server\/tmp\r\nmkdir \/mnt\/server\/logs\r\nif [ \"${WORDPRESS}\" == \"false\" ] || [ \"${WORDPRESS}\" == \"0\" ]; then\r\necho -e \"Install complete go to http:\/\/ip:port\/\"\r\nfi\r\n\r\n\r\n#wordpress\r\nif [ \"${WORDPRESS}\" == \"true\" ] || [ \"${WORDPRESS}\" == \"1\" ]; then\r\n    echo -e \"Installing wordpress\"\r\n    cd \/mnt\/server\/webroot\r\n    wget http:\/\/wordpress.org\/latest.tar.gz\r\n    tar xzf latest.tar.gz\r\n   mv wordpress\/* .\r\n   rm -rf wordpress latest.tar.gz\r\n   echo -e \"Install complete go to http:\/\/ip:port\/wp-admin \"\r\n   exit 0\r\n   fi\r\n   if [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\n## add git ending if it's not on the address\r\ncd \/mnt\/server\/webroot\r\nif [[ ${GIT_ADDRESS} != *.git ]]; then\r\n    GIT_ADDRESS=${GIT_ADDRESS}.git\r\nfi\r\n\r\nif [ -z \"${USERNAME}\" ] && [ -z \"${ACCESS_TOKEN}\" ]; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    GIT_ADDRESS=\"https:\/\/${USERNAME}:${ACCESS_TOKEN}@$(echo -e ${GIT_ADDRESS} | cut -d\/ -f3-)\"\r\nfi\r\n\r\n## pull git js repo\r\nrm index.php\r\nif [ \"$(ls -A \/mnt\/server\/webroot)\" ]; then\r\n    echo -e \"\/mnt\/server\/webroot directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \".git directory exists\"\r\n        if [ -f .git\/config ]; then\r\n            echo -e \"loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"files found with no git config\"\r\n            echo -e \"closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"\/mnt\/server\/webroot is empty.\\ncloning files into repo\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"cloning default branch\"\r\n        git clone ${GIT_ADDRESS} .\r\n    else\r\n        echo -e \"cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} .\r\n    fi\r\n\r\nfi",
             "container": "alpine:latest",
             "entrypoint": "ash"
         }
@@ -53,6 +53,66 @@
             "name": "Composer modules",
             "description": "Specify the composer modules you want to install, separate the packages with a space\r\nyou can always add packages later..",
             "env_variable": "COMPOSER_MODULES",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Git Repo Address",
+            "description": "Git repo to clone\r\n\r\nI.E. https:\/\/github.com\/finnie2006\/repo_name",
+            "env_variable": "GIT_ADDRESS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Git Branch",
+            "description": "What branch to pull from github.\r\n\r\nDefault is blank to pull the repo default branch",
+            "env_variable": "BRANCH",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Update",
+            "description": "Pull the latest files on startup when using a GitHub repo.",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "User Uploaded Files",
+            "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
+            "env_variable": "USER_UPLOAD",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Git Username",
+            "description": "Username to auth with git.",
+            "env_variable": "USERNAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Git Access Token",
+            "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps:\/\/github.com\/settings\/tokens\r\nhttps:\/\/gitlab.com\/-\/profile\/personal_access_tokens",
+            "env_variable": "ACCESS_TOKEN",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
