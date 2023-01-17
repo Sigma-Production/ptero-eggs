@@ -1,11 +1,11 @@
-name: Pterodactyl-Ubuntu
+name: Nginx 8.1
 
 on:
   workflow_dispatch:
 
 jobs:
   push:
-    name: "nginx-ptero:latest"
+    name: "nginx-ptero:8.1"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -28,4 +28,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/finnie2006/nginx-ptero:latest
+            ghcr.io/Sigma-Production/nginx-ptero:8.1
