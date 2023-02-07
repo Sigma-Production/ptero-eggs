@@ -4,17 +4,17 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2023-02-07T09:46:21+01:00",
+    "exported_at": "2023-02-07T09:58:34+01:00",
     "name": "WebHost Egg",
     "author": "info@finniedj.nl",
-    "description": "An egg to host any Website.\r\nit also has composer, just specify your packages in the packages box, and it will install the packages when you start the server, it also has wordpress, just turn on the slider when you make the server, and wordpress will get installed for you\r\n\r\nSigma Productions 2023",
+    "description": "An egg to host any Website.\r\nit also has composer, just specify your packages in the packages box, and it will install the packages when you start the server, it also has wordpress, just turn on the slider when you make the server, and wordpress will get installed for you\r\n\r\n\u00a9 Sigma Productions 2023",
     "features": null,
     "docker_images": {
         "PHP 8.0": " ghcr.io\/sigma-production\/nginx-ptero:8.0",
         "PHP 8.1": " ghcr.io\/sigma-production\/nginx-ptero:8.1"
     },
     "file_denylist": [],
-    "startup": "{{STARTUP_CMD}};",
+    "startup": "{{STARTUP_CMD}}; if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/container\/webroot; fi;",
     "config": {
         "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"\",\r\n    \"userInteraction\": []\r\n}",
