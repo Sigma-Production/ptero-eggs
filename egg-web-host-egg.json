@@ -16,7 +16,7 @@
     "file_denylist": [],
     "startup": "{{STARTUP_CMD}}; if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/container\/webroot; fi;",
     "config": {
-        "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\",\r\n            \"    root\": \"    root {{env.WEBROOT_PATH}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
         "stop": "^C"
@@ -28,8 +28,7 @@
             "entrypoint": "ash"
         }
     },
-    "variables": [
-        {
+    "variables": [{
             "name": "Startup Command",
             "description": "The command to startup the egg \r\n(Do not change if you do not know what you are doing!)",
             "env_variable": "STARTUP_CMD",
@@ -117,6 +116,16 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Web Root folder",
+            "description": "your default web root folder path",
+            "env_variable": "WEBROOT_PATH",
+            "default_value": "\/home\/container\/webroot",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|min:1",
             "field_type": "text"
         }
     ]
