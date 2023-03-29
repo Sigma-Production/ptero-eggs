@@ -27,8 +27,7 @@
             "entrypoint": "ash"
         }
     },
-    "variables": [
-        {
+    "variables": [{
             "name": "Startup Command",
             "description": "The command to start",
             "env_variable": "STARTUP_CMD",
