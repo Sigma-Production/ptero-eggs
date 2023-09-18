@@ -14,7 +14,7 @@
         "PHP 8.1": " ghcr.io\/sigma-production\/nginx-ptero:8.1"
     },
     "file_denylist": [],
-    "startup": "{{STARTUP_CMD}}; if [ ! -z \"${COMPOSER_MODULES}\" ]; then composer require ${COMPOSER_MODULES} --working-dir=/home/container/webroot; fi",
+    "startup": "{{STARTUP_CMD}}; if [[ ! -z \"${COMPOSER_MODULES}\" ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/container\/webroot; fi;",
     "config": {
         "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"\",\r\n    \"userInteraction\": []\r\n}",
