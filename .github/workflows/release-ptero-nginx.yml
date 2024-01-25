@@ -1,14 +1,12 @@
-name: Nginx 8.1
+name: Nginx 8.0
 
 on:
   workflow_dispatch:
 
 jobs:
   push:
-    name: "nginx-ptero:8.1"
+    name: "nginx-ptero:8.0"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
@@ -28,4 +26,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/sigma-production/nginx-ptero:8.1
+            ghcr.io/Helkor-eu/nginx-docker-container:8.0
