@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-06-23T23:05:44+02:00",
+    "exported_at": "2024-04-29T11:59:43+00:00",
     "name": "Nginx",
     "author": "info@finniedj.nl",
     "description": "An Nginx egg to host any Website",
@@ -42,7 +42,7 @@
             "name": "Wordpress",
             "description": "Enable or disable Wordpress\r\n\r\n0 = false (default)\r\n1 = true",
             "env_variable": "WORDPRESS",
-            "default_value": "false",
+            "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|boolean",
