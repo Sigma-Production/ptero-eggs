@@ -11,7 +11,9 @@
     "features": null,
     "docker_images": {
         "PHP 8.0": " ghcr.io\/sigma-production\/nginx-ptero:8.0",
-        "PHP 8.1": " ghcr.io\/sigma-production\/nginx-ptero:8.1"
+        "PHP 8.1": " ghcr.io\/sigma-production\/nginx-ptero:8.1",
+        "PHP 8.3": " ghcr.io\/sigma-production\/nginx-ptero:8.3"
+
     },
     "file_denylist": [],
     "startup": "{{STARTUP_CMD}}; if [[ ! -z ${COMPOSER_MODULES} ]]; then composer require ${COMPOSER_MODULES} --working-dir=\/home\/container\/webroot; fi;",
