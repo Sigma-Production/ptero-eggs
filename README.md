@@ -1,26 +1,25 @@
-# Pterodactyl webhost egg
+# Pterodactyl Webhost Egg
 
+### How to Use:
+1. Download the JSON file from the releases page.
+2. Import the egg into your Pterodactyl panel.
+3. Create a new server. Optionally, enable WordPress during setup for automatic installation.
+4. You can also install Composer packages, either during the initial setup or afterward.
+5. Visit the provided IP and port to access the server. For WordPress, go to `http://ip:port/wp-admin`.
+6. To use a custom domain, create a reverse proxy on the host.
 
-
-How to use:
-1. Go to releases and download the json file
-2. Import the egg to your panel like you normally do
-3. Create a new server, additionally you can enable wordpress, this will install wordpress for you
-and you can also install composer packages, this can also be done after the install
-4. Navigate to the given port and ip and you are good to go just add you files to the webroot folder
-(when using wordpress go to http://ip:port/wp-admin)
-Note: if you want it using a domain then create a reverse proxy on the host 
-
-
-To remove logs from console, open nginx/conf.d/default.conf and uncomment (remove #):
+### Disable Logs from Console:
+To remove access and error logs from the console, edit the Nginx configuration:
+- Navigate to `nginx/conf.d/default.conf`
+- Uncomment (remove the `#`) the following lines:
 
 ```
 #access_log /home/container/naccess.log;
-#error_log  /home/container/nerror.log error
+#error_log  /home/container/nerror.log error;
 ```
 
+---
 
-Originally forked and edited from https://gitlab.com/tenten8401/pterodactyl-nginx
-
+Originally forked and edited from [https://gitlab.com/tenten8401/pterodactyl-nginx](https://gitlab.com/tenten8401/pterodactyl-nginx)
 
 © Sigma Productions 2024
