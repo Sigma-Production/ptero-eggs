@@ -1,15 +1,14 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PLCN_v1",
+        "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-03-23T08:25:49+00:00",
+    "exported_at": "2025-03-23T09:39:35+01:00",
     "name": "WebHost Egg",
     "author": "info@djfinn.nl",
-    "uuid": "a5d41805-3803-477c-af3e-b8b182658fa6",
-    "description": "Introducing a versatile hosting solution for any website!\n\nWith built-in Composer support, simply specify the packages you need in the \u201cPackages\u201d box, and they\u2019ll be installed automatically when the server starts. Want to set up WordPress? Just toggle the WordPress slider during server setup, and WordPress will be ready to go in moments.\n\nSupport for Pelican panel & Pterodactyl!\n\n\u00a9 Sigma Productions 2025",
-    "features": [],
+    "description": "Introducing a versatile hosting solution for any website!\r\n\r\nWith built-in Composer support, simply specify the packages you need in the \u201cPackages\u201d box, and they\u2019ll be installed automatically when the server starts. Want to set up WordPress? Just toggle the WordPress slider during server setup, and WordPress will be ready to go in moments.\r\n\r\nSupport for Pelican panel & Pterodactyl!\r\n\r\n\u00a9 Sigma Productions 2025",
+    "features": null,
     "docker_images": {
         "PHP 8.4": "ghcr.io\/sigma-production\/nginx-ptero:8.4",
         "PHP 8.3": "ghcr.io\/sigma-production\/nginx-ptero:8.3",
@@ -20,147 +19,118 @@
     "file_denylist": [],
     "startup": "{{STARTUP_CMD}} && if [[ -n \"${COMPOSER_MODULES}\" ]]; then composer require \"${COMPOSER_MODULES}\" --working-dir=\/home\/container\/webroot; fi",
     "config": {
-        "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.allocations.default.port}};\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\n    \"done\": \"Web server is running. All services started successfully.\",\n    \"userInteraction\": []\n}",
+        "files": "{\r\n    \"nginx\/conf.d\/default.conf\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"    listen \": \"    listen {{server.build.default.port}};\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"[SUCCESS] Web server is running. All services started successfully.\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
         "stop": "^C & ^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n\r\n# Set working directory\r\ncd \/mnt\/server || exit 1\r\napk --update add git unzip curl || { echo \"Failed to install Git and required packages\"; exit 1; }\r\n\r\n# Clone the repository containing nginx and php configurations\r\nif git clone https:\/\/github.com\/Sigma-Production\/ptero-eggs .\/temp; then\r\n    cp -r .\/temp\/nginx .\/temp\/php-fpm .\/temp\/webroot \/mnt\/server\/\r\n    cp .\/temp\/start.sh \/mnt\/server\/\r\n    chmod +x \/mnt\/server\/start.sh\r\n    rm -rf .\/temp\r\nelse\r\n    echo \"Failed to clone repository\"; exit 1\r\nfi\r\n\r\n# Prepare directories\r\nmkdir -p \/mnt\/server\/tmp \/mnt\/server\/logs\r\n\r\n# WordPress installation\r\nif [ \"${WORDPRESS}\" = \"true\" ] || [ \"${WORDPRESS}\" = \"1\" ]; then\r\n    echo \"Installing WordPress...\"\r\n    cd \/mnt\/server\/webroot || exit 1\r\n    if wget -q https:\/\/wordpress.org\/latest.zip; then\r\n        unzip latest.zip && mv wordpress\/* . && rm -rf wordpress latest.zip\r\n        echo \"WordPress installation complete. Visit http:\/\/ip:port\/wp-admin\"\r\n    else\r\n        echo \"Failed to download WordPress\"; exit 1\r\n    fi\r\n    exit 0\r\nfi\r\n\r\n# NamelessMC installation\r\nif [ \"${NAMELESSMC}\" = \"true\" ] || [ \"${NAMELESSMC}\" = \"1\" ]; then\r\n    echo \"Installing NamelessMC...\"\r\n    cd \/mnt\/server\/webroot || exit 1\r\n    curl -L \"https:\/\/github.com\/NamelessMC\/Nameless\/releases\/latest\/download\/nameless-deps-dist.tar.xz\" | \\\r\n        tar -xJ -C \/mnt\/server\/webroot || { echo \"Failed to download or extract NamelessMC\"; exit 1; }\r\n\r\n    # Configure Nginx for NamelessMC\r\n    echo \"Configuring Nginx for NamelessMC...\"\r\n    cd \/mnt\/server\/nginx\/conf.d || { echo \"Failed to navigate to Nginx configuration directory\"; exit 1; }\r\n    rm -f default.conf  # Remove the default configuration file if it exists\r\n    curl -LO https:\/\/raw.githubusercontent.com\/Sigma-Production\/ptero-eggs\/NamelessMC\/nginx\/conf.d\/default.conf || { echo \"Failed to download Nginx configuration\"; exit 1; }\r\n    \r\n    echo \"NamelessMC installation and configuration completed.\"\r\n    exit 0\r\nfi\r\n\r\n# Check for user-uploaded content\r\nif [ \"${USER_UPLOAD}\" = \"true\" ] || [ \"${USER_UPLOAD}\" = \"1\" ]; then\r\n    echo \"User upload enabled. Assuming custom setup.\"\r\n    exit 0\r\nfi\r\n\r\n# Configure Git repository if provided\r\ncd \/mnt\/server\/webroot || exit 1\r\n\r\n# Ensure .git extension for GIT_ADDRESS\r\n[ \"${GIT_ADDRESS##*.}\" != \"git\" ] && GIT_ADDRESS=\"${GIT_ADDRESS}.git\"\r\n\r\n# Authenticate if username and access token are provided\r\nif [ -n \"${USERNAME}\" ] && [ -n \"${ACCESS_TOKEN}\" ]; then\r\n    GIT_ADDRESS=\"https:\/\/${USERNAME}:${ACCESS_TOKEN}@${GIT_ADDRESS#https:\/\/}\"\r\nfi\r\n\r\n# Handle Git repository cloning or updating\r\nif [ -n \"$(ls -A \/mnt\/server\/webroot 2>\/dev\/null)\" ]; then\r\n    echo \"\/mnt\/server\/webroot directory is not empty.\"\r\n    if [ -d .git ] && [ -f .git\/config ]; then\r\n        ORIGIN=$(git config --get remote.origin.url)\r\n        if [ \"${ORIGIN}\" = \"${GIT_ADDRESS}\" ]; then\r\n            echo \"Pulling latest changes from GitHub\"\r\n            git pull || { echo \"Git pull failed\"; exit 1; }\r\n        else\r\n            echo \"Different Git origin detected; skipping pull to avoid conflicts.\"\r\n        fi\r\n    else\r\n        echo \"Directory contains files without a Git configuration.\"\r\n        exit 10\r\n    fi\r\nelse\r\n    echo \"\/mnt\/server\/webroot is empty. Cloning repository...\"\r\n    if [ -n \"${BRANCH}\" ]; then\r\n        echo \"Cloning branch ${BRANCH}\"\r\n        git clone --single-branch --branch \"${BRANCH}\" \"${GIT_ADDRESS}\" .\r\n    else\r\n        echo \"Cloning default branch\"\r\n        git clone \"${GIT_ADDRESS}\" .\r\n    fi\r\nfi\r\n\r\necho \"Installation complete. Visit http:\/\/ip:port\/\"",
+            "script": "#!\/bin\/ash\r\n\r\n# Set working directory\r\ncd \/mnt\/server || exit 1\r\napk --update add git unzip curl || { echo \"Failed to install Git and required packages\"; exit 1; }\r\n\r\n# Clone the repository containing nginx and php configurations\r\nif git clone https:\/\/github.com\/Sigma-Production\/ptero-eggs .\/temp; then\r\n    cp -r .\/temp\/nginx .\/temp\/php-fpm .\/temp\/webroot \/mnt\/server\/\r\n    cp .\/temp\/start.sh \/mnt\/server\/\r\n    chmod +x \/mnt\/server\/start.sh\r\n    rm -rf .\/temp\r\nelse\r\n    echo \"Failed to clone repository\"; exit 1\r\nfi\r\n\r\n# Prepare directories\r\nmkdir -p \/mnt\/server\/tmp \/mnt\/server\/logs\r\n\r\n# WordPress installation\r\nif [ \"${WORDPRESS}\" = \"true\" ] || [ \"${WORDPRESS}\" = \"1\" ]; then\r\n    echo \"Installing WordPress...\"\r\n    cd \/mnt\/server\/webroot || exit 1\r\n    if curl -fLO https:\/\/wordpress.org\/latest.zip; then\r\n        unzip latest.zip && mv wordpress\/* . && rm -rf wordpress latest.zip\r\n        echo \"WordPress installation complete. Visit http:\/\/ip:port\/wp-admin\"\r\n    else\r\n        echo \"Failed to download WordPress\"; exit 1\r\n    fi\r\n    exit 0\r\nfi\r\n\r\n# NamelessMC installation\r\nif [ \"${NAMELESSMC}\" = \"true\" ] || [ \"${NAMELESSMC}\" = \"1\" ]; then\r\n    echo \"Installing NamelessMC...\"\r\n    cd \/mnt\/server\/webroot || exit 1\r\n    curl -L \"https:\/\/github.com\/NamelessMC\/Nameless\/releases\/latest\/download\/nameless-deps-dist.tar.xz\" | \\\r\n        tar -xJ -C \/mnt\/server\/webroot || { echo \"Failed to download or extract NamelessMC\"; exit 1; }\r\n\r\n    # Configure Nginx for NamelessMC\r\n    echo \"Configuring Nginx for NamelessMC...\"\r\n    cd \/mnt\/server\/nginx\/conf.d || { echo \"Failed to navigate to Nginx configuration directory\"; exit 1; }\r\n    rm -f default.conf  # Remove the default configuration file if it exists\r\n    curl -LO https:\/\/raw.githubusercontent.com\/Sigma-Production\/ptero-eggs\/NamelessMC\/nginx\/conf.d\/default.conf || { echo \"Failed to download Nginx configuration\"; exit 1; }\r\n    \r\n    echo \"NamelessMC installation and configuration completed.\"\r\n    exit 0\r\nfi\r\n\r\n# Check for user-uploaded content\r\nif [ \"${USER_UPLOAD}\" = \"true\" ] || [ \"${USER_UPLOAD}\" = \"1\" ]; then\r\n    echo \"User upload enabled. Assuming custom setup.\"\r\n    exit 0\r\nfi\r\n\r\n# Configure Git repository if provided\r\ncd \/mnt\/server\/webroot || exit 1\r\n\r\n# Ensure .git extension for GIT_ADDRESS\r\n[ \"${GIT_ADDRESS##*.}\" != \"git\" ] && GIT_ADDRESS=\"${GIT_ADDRESS}.git\"\r\n\r\n# Authenticate if username and access token are provided\r\nif [ -n \"${USERNAME}\" ] && [ -n \"${ACCESS_TOKEN}\" ]; then\r\n    GIT_ADDRESS=\"https:\/\/${USERNAME}:${ACCESS_TOKEN}@${GIT_ADDRESS#https:\/\/}\"\r\nfi\r\n\r\n# Handle Git repository cloning or updating\r\nif [ -n \"$(ls -A \/mnt\/server\/webroot 2>\/dev\/null)\" ]; then\r\n    echo \"\/mnt\/server\/webroot directory is not empty.\"\r\n    if [ -d .git ] && [ -f .git\/config ]; then\r\n        ORIGIN=$(git config --get remote.origin.url)\r\n        if [ \"${ORIGIN}\" = \"${GIT_ADDRESS}\" ]; then\r\n            echo \"Pulling latest changes from GitHub\"\r\n            git pull || { echo \"Git pull failed\"; exit 1; }\r\n        else\r\n            echo \"Different Git origin detected; skipping pull to avoid conflicts.\"\r\n        fi\r\n    else\r\n        echo \"Directory contains files without a Git configuration.\"\r\n        exit 10\r\n    fi\r\nelse\r\n    echo \"\/mnt\/server\/webroot is empty. Cloning repository...\"\r\n    if [ -n \"${BRANCH}\" ]; then\r\n        echo \"Cloning branch ${BRANCH}\"\r\n        git clone --single-branch --branch \"${BRANCH}\" \"${GIT_ADDRESS}\" .\r\n    else\r\n        echo \"Cloning default branch\"\r\n        git clone \"${GIT_ADDRESS}\" .\r\n    fi\r\nfi\r\n\r\necho \"Installation complete. Visit http:\/\/ip:port\/\"",
             "container": "alpine:latest",
             "entrypoint": "ash"
         }
     },
     "variables": [
         {
-            "sort": 1,
             "name": "Startup Command",
             "description": "The command to startup the egg \r\n(Do not change if you do not know what you are doing!)",
             "env_variable": "STARTUP_CMD",
             "default_value": ".\/start.sh",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "present"
-            ]
+            "rules": "present",
+            "field_type": "text"
         },
         {
-            "sort": 2,
             "name": "Wordpress",
             "description": "Enable or disable Wordpress\r\n\r\n0 = false (default)\r\n1 = true",
             "env_variable": "WORDPRESS",
             "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ]
+            "rules": "required|boolean",
+            "field_type": "text"
         },
         {
-            "sort": 3,
             "name": "Composer modules",
             "description": "Specify the composer modules you want to install, separate the packages with a space\r\nyou can always add packages later..",
             "env_variable": "COMPOSER_MODULES",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
-            "sort": 4,
             "name": "Git Repo Address",
             "description": "Git repo to clone\r\n\r\nI.E. https:\/\/github.com\/finnie2006\/repo_name",
             "env_variable": "GIT_ADDRESS",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
-            "sort": 5,
             "name": "Git Branch",
             "description": "What branch to pull from github.\r\n\r\nDefault is blank to pull the repo default branch",
             "env_variable": "BRANCH",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
-            "sort": 6,
             "name": "Auto Update",
             "description": "Pull the latest files on startup when using a GitHub repo.",
             "env_variable": "AUTO_UPDATE",
             "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ]
+            "rules": "required|boolean",
+            "field_type": "text"
         },
         {
-            "sort": 7,
             "name": "User Uploaded Files",
             "description": "Skip all the install stuff if you are letting a user upload files.\r\n\r\n0 = false (default)\r\n1 = true",
             "env_variable": "USER_UPLOAD",
             "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ]
+            "rules": "required|boolean",
+            "field_type": "text"
         },
         {
-            "sort": 8,
             "name": "Git Username",
             "description": "Username to auth with git.",
             "env_variable": "USERNAME",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
-            "sort": 9,
             "name": "Git Access Token",
             "description": "Password to use with git.\r\n\r\nIt's best practice to use a Personal Access Token.\r\nhttps:\/\/github.com\/settings\/tokens\r\nhttps:\/\/gitlab.com\/-\/profile\/personal_access_tokens",
             "env_variable": "ACCESS_TOKEN",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ]
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
-            "sort": 10,
             "name": "NamelessMC install",
             "description": "Enable this if you want to install namelessmc.\r\n\r\nhttps:\/\/namelessmc.com\/",
             "env_variable": "NAMELESSMC",
             "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ]
+            "rules": "required|boolean",
+            "field_type": "text"
         }
     ]
 }
