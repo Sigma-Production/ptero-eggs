@@ -1,5 +1,4 @@
-#!/bin/bash
-# Note: In Alpine containers, this should use #!/bin/ash
+#!/bin/ash
 
 # Log Rotation Script for Pterodactyl Web Host Egg
 # This script handles log rotation without requiring logrotate

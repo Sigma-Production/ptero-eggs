@@ -1,0 +1,21 @@
+# Log files - these should not be committed
+*.log
+*.log.*
+
+# Temporary files
+tmp/
+*.tmp
+*.temp
+
+# PHP temporary files
+*.cache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

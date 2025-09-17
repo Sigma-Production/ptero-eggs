@@ -33,6 +33,19 @@ You can manually manage logs using the included log rotation script:
 ./scripts/logrotate.sh
 ```
 
+#### Easy Log Management Helper:
+For easier log management, use the included helper script:
+```bash
+# Show log status and configuration
+./scripts/logmanager.sh status
+
+# Manually rotate logs
+./scripts/logmanager.sh rotate
+
+# Show all available options
+./scripts/logmanager.sh help
+```
+
 ### Disable Logs from Console:
 To remove access and error logs from the console, edit the Nginx configuration:
 - Navigate to `nginx/conf.d/default.conf`
