@@ -37,6 +37,14 @@ else
     exit 1
 fi
 
+# Start log rotation daemon in background
+echo "⏳ Starting log rotation daemon..."
+if /home/container/scripts/logrotate.sh daemon > /dev/null 2>&1 &; then
+    log_success "Log rotation daemon started successfully."
+else
+    log_warning "Failed to start log rotation daemon, logs may grow indefinitely."
+fi
+
 # NGINX if else WIP
 echo "⏳ Starting Nginx..."
 # Final message
