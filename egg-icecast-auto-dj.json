@@ -1,0 +1,33 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-09-20T15:37:39+00:00",
+    "name": "Icecast-AutoDJ",
+    "author": "info@djfinn.nl",
+    "uuid": "a3f1c2d7-7b4e-4f0c-9438-b27f1a6c8d2e",
+    "description": "Sets up an Icecast2 streaming server with Liquidsoap as the source. Ideal for internet radio with AutoDJ, live stream, and fallback support. \n\nNote: A license is required in most countries to publicly stream music.\n\n\u00a9 Sigma Productions 2025",
+    "tags": [],
+    "features": [],
+    "docker_images": {
+        "RadioDj Egg": "ghcr.io/finnie2006/icecast-autodj:latest"
+    },
+    "file_denylist": [],
+    "startup": "/usr/local/bin/run.sh",
+    "config": {
+        "files": "{\n  \"icecast.xml\": {\n    \"parser\": \"xml\",\n    \"find\": {\n      \"icecast.listen-socket.port\": \"{{server.allocations.default.port}}\"\n    }\n  },\n  \"radio.liq\": {\n    \"parser\": \"file\",\n    \"find\": {\n      \"let port = __PORT__\": \"let port = {{server.allocations.default.port}}\"\n    }\n  }\n}",
+        "startup": "{\n    \"done\": \"[*] Starting Liquidsoap...\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\r\nset -e\r\necho \"[*] Starting setup...\"\r\ncd /mnt/server\r\n\r\n# Clone de repo\r\nif [ ! -d \"icecast-autodj\" ]; then\r\n    echo \"[*] Cloning repository...\"\r\n    git clone https://github.com/finnie2006/icecast-autodj.git\r\nelse\r\n    echo \"[*] Repository already present.\"\r\nfi\r\n\r\n# Kopieer alleen de config-bestanden\r\necho \"[*] Copying liquidsoap and icecast configs...\"\r\ncp icecast-autodj/configs/radio.liq /mnt/server/radio.liq\r\ncp icecast-autodj/configs/icecast.xml /mnt/server/icecast.xml\r\n\r\n# Maak de data directories\r\necho \"[*] Creating data directories...\"\r\nmkdir -p /mnt/server/music\r\nmkdir -p /mnt/server/log\r\n\r\n# Ruim de repo op\r\necho \"[*] Cleaning up cloned repo...\"\r\nrm -rf /mnt/server/icecast-autodj\r\n\r\necho \"[*] Setup complete! \ud83c\udf89\"",
+            "container": "ghcr.io/pterodactyl/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": []
+}
