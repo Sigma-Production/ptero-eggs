@@ -12,7 +12,7 @@
     "tags": [],
     "features": [],
     "docker_images": {
-        "RadioDj Egg": "ghcr.io/finnie2006/icecast-autodj:latest"
+        "RadioDj Egg": "ghcr.io/sigma-production/icecast-autodj:latest"
     },
     "file_denylist": [],
     "startup": "/usr/local/bin/run.sh",
