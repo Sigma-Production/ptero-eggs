@@ -28,6 +28,19 @@ To remove access/error logs from console output:
   #error_log  /home/container/nerror.log error;
   ```
 
+#### 🔧 Using Alternative Configurations (e.g., Nextcloud):
+The repository includes alternative Nginx configurations in `nginx/conf.d/`:
+- `default.conf` - General purpose web server configuration
+- `nextcloud.conf` - Optimized configuration for Nextcloud installations
+
+To use an alternative configuration:
+1. Rename or remove `default.conf` (e.g., `mv default.conf default.conf.backup`)
+2. Ensure your chosen configuration is active (e.g., `nextcloud.conf`)
+3. Edit the `listen` directive to match your assigned port if needed
+4. Restart the server
+
+**Note:** Only one server configuration should listen on the same port to avoid conflicts.
+
 ---
 
 ### 2. 🎧 Icecast2 + Liquidsoap Radio Egg
