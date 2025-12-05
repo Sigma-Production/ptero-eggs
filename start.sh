@@ -29,17 +29,18 @@ else
 fi
 
 # Determine Nginx port from Pterodactyl environment
-# Pterodactyl standard port variable: PORT
-NGINX_PORT=${PORT:-8080}  # fallback auf 8080, falls PORT nicht gesetzt
+NGINX_PORT=${PORT:-8080}
 NEXTCLOUD_CONF="/home/container/nginx/conf.d/nextcloud.conf"
 
-# Replace template variable in nextcloud.conf with actual port
-if grep -q "{{server.allocations.default.port}}" "$NEXTCLOUD_CONF"; then
-    sed -i "s/{{server.allocations.default.port}}/$NGINX_PORT/" "$NEXTCLOUD_CONF"
-    log_success "Nextcloud Nginx config updated with port $NGINX_PORT."
-else
-    log_warning "No template variable found in nextcloud.conf. Skipping replacement."
-fi
+echo "⏳ Configuring Nginx Port ($NGINX_PORT)..."
+
+# Replace placeholder on first run
+sed -i "s/{{server.allocations.default.port}}/$NGINX_PORT/g" "$NEXTCLOUD_CONF"
+
+# Update existing listen directives to current port
+sed -i "s/listen [0-9]*;/listen $NGINX_PORT;/g" "$NEXTCLOUD_CONF"
+
+log_success "Nextcloud Nginx config updated to listen on port $NGINX_PORT."
 
 # Start Nginx
 echo "⏳ Starting Nginx..."
