@@ -6,18 +6,9 @@ YELLOW="\033[1;33m"
 RED="\033[0;31m"
 RESET="\033[0m"
 
-# Function to print messages with colors
-log_success() {
-    echo -e "${GREEN}[SUCCESS] $1${RESET}"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING] $1${RESET}"
-}
-
-log_error() {
-    echo -e "${RED}[ERROR] $1${RESET}"
-}
+log_success() { echo -e "${GREEN}[SUCCESS] $1${RESET}"; }
+log_warning() { echo -e "${YELLOW}[WARNING] $1${RESET}"; }
+log_error()   { echo -e "${RED}[ERROR] $1${RESET}"; }
 
 # Clean up temp directory
 echo "⏳ Cleaning up temporary files..."
@@ -37,11 +28,28 @@ else
     exit 1
 fi
 
-# NGINX if else WIP
-echo "⏳ Starting Nginx..."
-# Final message
-log_success "Web server is running. All services started successfully."
-/usr/sbin/nginx -c /home/container/nginx/nginx.conf -p /home/container/
+# Determine Nginx port from Pterodactyl environment
+NGINX_PORT=${PORT:-8080}
+NEXTCLOUD_CONF="/home/container/nginx/conf.d/nextcloud.conf"
 
-# Keep the container running (optional, depending on your container setup)
+echo "⏳ Configuring Nginx Port ($NGINX_PORT)..."
+
+# Replace placeholder on first run
+sed -i "s/{{server.allocations.default.port}}/$NGINX_PORT/g" "$NEXTCLOUD_CONF"
+
+# Update existing listen directives to current port
+sed -i "s/listen [0-9]*;/listen $NGINX_PORT;/g" "$NEXTCLOUD_CONF"
+
+log_success "Nextcloud Nginx config updated to listen on port $NGINX_PORT."
+
+# Start Nginx
+echo "⏳ Starting Nginx..."
+if /usr/sbin/nginx -c /home/container/nginx/nginx.conf -p /home/container/; then
+    log_success "Web server is running. All services started successfully."
+else
+    log_error "Failed to start Nginx."
+    exit 1
+fi
+
+# Keep the container alive
 tail -f /dev/null
