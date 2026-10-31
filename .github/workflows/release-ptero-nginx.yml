@@ -1,14 +1,22 @@
-name: Nginx 8.1
+name: Nginx PHP Release
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   push:
-    name: "nginx-ptero:8.1"
+    name: "nginx-ptero:${{ matrix.php_tag }}"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      matrix:
+        php_tag:
+          - 8.4.27
+          - 8.3.36
+          - 8.2.35
     steps:
       - uses: actions/checkout@v2
       - uses: docker/setup-qemu-action@v1
@@ -28,4 +36,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/sigma-production/nginx-ptero:8.1
+            ghcr.io/sigma-production/nginx-ptero:${{ matrix.php_tag }}
