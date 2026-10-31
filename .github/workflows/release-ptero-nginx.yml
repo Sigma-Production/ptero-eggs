@@ -3,6 +3,9 @@ name: Nginx 8.4.27
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   push:
     name: "nginx-ptero:8.4.27"
