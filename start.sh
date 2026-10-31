@@ -30,7 +30,7 @@ fi
 
 # Start PHP-FPM
 echo "⏳ Starting PHP-FPM..."
-if /usr/sbin/php-fpm8 --fpm-config /home/container/php-fpm/php-fpm.conf --daemonize; then
+if php-fpm --fpm-config /home/container/php-fpm/php-fpm.conf --daemonize; then
     log_success "PHP-FPM started successfully."
 else
     log_error "Failed to start PHP-FPM."
