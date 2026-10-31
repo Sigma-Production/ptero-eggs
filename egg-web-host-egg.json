@@ -10,9 +10,9 @@
     "description": "Introducing a versatile hosting solution for any website!\r\n\r\nWith built-in Composer support, simply specify the packages you need in the \u201cPackages\u201d box, and they\u2019ll be installed automatically when the server starts. Want to set up WordPress? Just toggle the WordPress slider during server setup, and WordPress will be ready to go in moments.\r\n\r\nSupport for Pelican panel & Pterodactyl!\r\n\r\n\u00a9 Sigma Productions 2025",
     "features": null,
     "docker_images": {
-        "PHP 8.4": "ghcr.io\/sigma-production\/nginx-ptero:8.4",
-        "PHP 8.3": "ghcr.io\/sigma-production\/nginx-ptero:8.3",
-        "PHP 8.2": "ghcr.io\/sigma-production\/nginx-ptero:8.2",
+        "PHP 8.4.27": "ghcr.io\/sigma-production\/nginx-ptero:8.4.27",
+        "PHP 8.3.36": "ghcr.io\/sigma-production\/nginx-ptero:8.3.36",
+        "PHP 8.2.35": "ghcr.io\/sigma-production\/nginx-ptero:8.2.35",
         "PHP 8.1": "ghcr.io\/sigma-production\/nginx-ptero:8.1",
         "PHP 8.0 - EOL ": "ghcr.io\/sigma-production\/nginx-ptero:8.0"
     },
